@@ -20,13 +20,36 @@
 $().ready(function() {
     $.getJSON( "data.json", function( data ) {
         Object.keys(data).forEach(function(name) {
+            var date = new Date(data[name]);
+            var daysLeft = getDaysLeft(date);
+            var yearsOld = getYearsOld(date);
             var jumbo = $( "<div class='jumbotron'></div>" );
             jumbo.append("<h1>" + name + "</h1>");
-            jumbo.append("<h2>" + data[name] + "</h2>");
+            jumbo.append("<h2>" + date.toLocaleDateString("de-DE") + " / " + daysLeft + " days left / " + yearsOld + " years old </h2>");
             $('#container').append(jumbo);
         });
     });
 });
+
+function getDaysLeft(date) {
+    var one_day = 86400000.0;
+    var today = new Date();
+    var other = new Date(date);
+    other.setFullYear(today.getFullYear());
+    var diff = other.getTime() - today.getTime();
+    var daysLeft = Math.ceil(diff / one_day); 
+    if(daysLeft < 0) {
+        other.setFullYear(today.getFullYear() + 1);
+        diff = other.getTime() - today.getTime();
+        daysLeft = Math.ceil(diff / one_day); 
+    }
+    return daysLeft;
+}
+
+function getYearsOld(date) {
+    //TODO
+    return 0;
+}
 	
 </script>
 
