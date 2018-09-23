@@ -72,7 +72,7 @@ function getDaysLeft(date) {
     if(daysLeft < 0) {
         other.setFullYear(today.getFullYear() + 1);
         diff = other.getTime() - today.getTime();
-        daysLeft = Math.ceil(diff / one_day); 
+        daysLeft = Math.ceil(diff / one_day);
     }
     return daysLeft;
 }
@@ -93,10 +93,10 @@ function getYearsOld(date) {
 
 <div id="container" class="container">
     <div id="carddeck2" class="card-deck">
-        <div ng-repeat="entry in data" class='card bg-light' style='width: 18rem;'>
+        <div ng-repeat="entry in data | orderBy: 'daysLeft'" class='card bg-light' style='width: 18rem;'>
             <div class='card-header'><h5><b>{{entry.name}}</b></h5></div>
             <div class='card-body'>
-                <div class='container'><div class='row'><div class='col'>{{vyearsOld}} years</div><div class='col'>-{{entry.daysLeft}} days</div></div></div>
+                <div class='container'><div class='row'><div class='col'>{{entry.yearsOld}} years</div><div class='col'>-{{entry.daysLeft}} days</div></div></div>
             </div>
             <div class='card-footer'><h5>{{entry.dateString}}</h5></div>
         </div>
