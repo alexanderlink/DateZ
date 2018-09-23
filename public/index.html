@@ -92,8 +92,11 @@ function getYearsOld(date) {
 <body ng-controller="MyController">
 
 <div id="container" class="container">
+
+    <input ng-model="search" type="text" class="form-control" id="search" placeholder="Search">
+
     <div id="carddeck2" class="card-deck">
-        <div ng-repeat="entry in data | orderBy: 'daysLeft'" class='card bg-light' style='width: 18rem;'>
+        <div ng-repeat="entry in data | orderBy: 'daysLeft' | filter:search" class='card bg-light' style='width: 18rem;'>
             <div class='card-header'><h5><b>{{entry.name}}</b></h5></div>
             <div class='card-body'>
                 <div class='container'><div class='row'><div class='col'>{{entry.yearsOld}} years</div><div class='col'>-{{entry.daysLeft}} days</div></div></div>
@@ -101,7 +104,29 @@ function getYearsOld(date) {
             <div class='card-footer'><h5>{{entry.dateString}}</h5></div>
         </div>
     </div>
+
+    <table class="table">
+    <thead>
+        <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Birthday</th>
+        <th scope="col">Age</th>
+        <th scope="col">Days left</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="entry in data | orderBy: 'daysLeft' | filter:search">
+        <th scope="row">{{entry.name}}</th>
+        <td>{{entry.dateString}}</td>
+        <td>{{entry.yearsOld}}</td>
+        <td>-{{entry.daysLeft}}</td>
+        </tr>
+    </tbody>
+    </table>
+
 </div>
+
+
 
 
 <script>
