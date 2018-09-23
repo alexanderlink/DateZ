@@ -10,57 +10,35 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js"></script>
+  <style>
+      .morespace {
+          margin-top: 5px;
+          margin-bottom: 5px;
+      }
+  </style>
 </head>
 
 <script>
 
-    var app = angular.module('app', []);
-    angular.module('app').controller('MyController', ['$scope', function($scope){
-        $scope.test = "Hello";
-        $scope.data = [];
+var app = angular.module('app', []);
+angular.module('app').controller('MyController', ['$scope', function($scope){
+    $scope.test = "Hello";
+    $scope.data = [];
 
-        $.getJSON( "data.json", function( data ) {
-            Object.keys(data).forEach(function(name) {
-                var obj = {};
-                obj.name = name;
-                obj.date = new Date(data[name]);
-                obj.dateString = obj.date.toLocaleDateString("de-DE");
-                obj.daysLeft = getDaysLeft(obj.date);
-                obj.yearsOld = getYearsOld(obj.date);
-                $scope.data.push(obj);
-
-                //var element = newJumbo(name, date, yearsOld, daysLeft);
-                //$('#container').append(element);
-
-                //var element = newCard(obj.name, obj.date, obj.yearsOld, obj.daysLeft);
-                //$('#carddeck').append(element);
-            });
-            $scope.$apply();
+    $.getJSON( "data.json", function( data ) {
+        Object.keys(data).forEach(function(name) {
+            var obj = {};
+            obj.name = name;
+            obj.date = new Date(data[name]);
+            obj.dateString = obj.date.toLocaleDateString("de-DE");
+            obj.daysLeft = getDaysLeft(obj.date);
+            obj.yearsOld = getYearsOld(obj.date);
+            $scope.data.push(obj);
         });
+        $scope.$apply();
+    });
 
-    }]);
-
-/*function newJumbo(name, date, yearsOld, daysLeft) {
-    var jumbo = $( "<div class='jumbotron'></div>" );
-    jumbo.append("<h1>" + name + "</h1>");
-    jumbo.append("<h2><b>" + date.toLocaleDateString("de-DE") + "</b></h2>");
-    jumbo.append("<h2>" + yearsOld + " years old &nbsp;&nbsp;&ndash;&nbsp;&nbsp; next in " + daysLeft + " days</h2>");
-    return jumbo;
-}*/
-
-/*function newCard(name, date, yearsOld, daysLeft) {
-    var card = $( "<div class='card bg-light' style='width: 18rem;'></div>" );
-    var cardBody = $( "<div class='card-body'></div>" );
-    var cardHeader = $( "<div class='card-header'><h5><b>" + name + "</b></h5></div>" );
-    //var cardText = $( "<p class='card-text'>" + yearsOld + " years old &nbsp;&nbsp;&ndash;&nbsp;&nbsp; next in " + daysLeft + " days" + "</p>" );
-    var cardText = $( "<div class='container'><div class='row'><div class='col'>" + yearsOld + " years</div><div class='col'>-" + daysLeft + " days" + "</div></div></div>" );
-    var cardFooter = $( "<div class='card-footer'><h5>" + date.toLocaleDateString("de-DE") + "</h5></div>" );
-    card.append(cardHeader);
-    card.append(cardBody);
-    cardBody.append(cardText);
-    card.append(cardFooter);
-    return card;
-}*/
+}]);
 
 function getDaysLeft(date) {
     var one_day = 86400000.0;
@@ -93,8 +71,18 @@ function getYearsOld(date) {
 
 <div id="container" class="container">
 
-    <input ng-model="search" type="text" class="form-control" id="search" placeholder="Search">
+<nav>
+  <div class="nav nav-pills" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-cards-tab" data-toggle="tab" href="#nav-cards" role="tab" aria-controls="nav-cards" aria-selected="true">Cards</a>
+    <a class="nav-item nav-link" id="nav-table-tab" data-toggle="tab" href="#nav-table" role="tab" aria-controls="nav-table" aria-selected="false">Table</a>
+    <input ng-model="search" type="text" class="nav-item form-control morespace" id="search" placeholder="Search">
+  </div>
+</nav>
 
+<div class="tab-content" id="nav-tabContent">
+
+
+  <div class="tab-pane fade show active" id="nav-cards" role="tabpanel" aria-labelledby="nav-cards-tab">
     <div id="carddeck2" class="card-deck">
         <div ng-repeat="entry in data | orderBy: 'daysLeft' | filter:search" class='card bg-light' style='width: 18rem;'>
             <div class='card-header'><h5><b>{{entry.name}}</b></h5></div>
@@ -104,7 +92,10 @@ function getYearsOld(date) {
             <div class='card-footer'><h5>{{entry.dateString}}</h5></div>
         </div>
     </div>
+  </div>
 
+
+  <div class="tab-pane fade" id="nav-table" role="tabpanel" aria-labelledby="nav-table-tab">
     <table class="table">
     <thead>
         <tr>
@@ -123,11 +114,13 @@ function getYearsOld(date) {
         </tr>
     </tbody>
     </table>
+  </div>
+
 
 </div>
 
 
-
+</div>
 
 <script>
 $().ready(function() { });
