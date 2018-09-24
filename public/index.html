@@ -26,6 +26,14 @@ angular.module('app').controller('MyController', ['$scope', function($scope){
     $scope.data = [];
 
     $.getJSON( "data.json", function( data ) {
+		processData(data);
+    }).fail(function() {
+        $.getJSON( "data_example.json", function( data ) {
+			processData(data);
+		})
+    });
+
+	function processData(data) {
         Object.keys(data).forEach(function(name) {
             var obj = {};
             obj.name = name;
@@ -36,8 +44,8 @@ angular.module('app').controller('MyController', ['$scope', function($scope){
             $scope.data.push(obj);
         });
         $scope.$apply();
-    });
-
+	}
+	
 }]);
 
 function getDaysLeft(date) {
@@ -73,8 +81,8 @@ function getYearsOld(date) {
 
 <nav>
   <div class="nav nav-pills" id="nav-tab" role="tablist">
-    <a class="nav-item nav-link active" id="nav-cards-tab" data-toggle="tab" href="#nav-cards" role="tab" aria-controls="nav-cards" aria-selected="true">Cards</a>
-    <a class="nav-item nav-link" id="nav-table-tab" data-toggle="tab" href="#nav-table" role="tab" aria-controls="nav-table" aria-selected="false">Table</a>
+    <a class="nav-item nav-link active" id="nav-table-tab" data-toggle="tab" href="#nav-table" role="tab" aria-controls="nav-table" aria-selected="false">Table</a>
+    <a class="nav-item nav-link" id="nav-cards-tab" data-toggle="tab" href="#nav-cards" role="tab" aria-controls="nav-cards" aria-selected="true">Cards</a>
     <input ng-model="search" type="text" class="nav-item form-control morespace" id="search" placeholder="Search">
   </div>
 </nav>
@@ -82,7 +90,7 @@ function getYearsOld(date) {
 <div class="tab-content" id="nav-tabContent">
 
 
-  <div class="tab-pane fade show active" id="nav-cards" role="tabpanel" aria-labelledby="nav-cards-tab">
+  <div class="tab-pane fade" id="nav-cards" role="tabpanel" aria-labelledby="nav-cards-tab">
     <div id="carddeck2" class="card-deck">
         <div ng-repeat="entry in data | orderBy: 'daysLeft' | filter:search" class='card bg-light' style='width: 18rem;'>
             <div class='card-header'><h5><b>{{entry.name}}</b></h5></div>
@@ -95,7 +103,7 @@ function getYearsOld(date) {
   </div>
 
 
-  <div class="tab-pane fade" id="nav-table" role="tabpanel" aria-labelledby="nav-table-tab">
+  <div class="tab-pane fade show active" id="nav-table" role="tabpanel" aria-labelledby="nav-table-tab">
     <table class="table">
     <thead>
         <tr>
