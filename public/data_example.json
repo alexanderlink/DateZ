@@ -1,5 +1,7 @@
-{
-    "John": "1984-03-14",
-    "Jane": "1980-01-23",
-    "Test": "2017-09-25"
-}
+[
+    {"name":"John", "date":"1984-03-14", "gender":"male"},
+    {"name":"Jane", "date":"1980-01-23", "gender":"female"},
+    {"name":"Neutral", "date":"2017-09-25", "gender":"neutral"},
+    {"name":"Favorite", "date":"2017-09-25", "favorite":true},
+    {"name":"No Year", "date":"0000-09-25"}
+]
