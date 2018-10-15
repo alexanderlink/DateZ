@@ -15,6 +15,18 @@
           margin-top: 5px;
           margin-bottom: 5px;
       }
+      .row-male {
+          background-color: lightskyblue;
+      }
+      .row-female {
+        background-color: lightpink;
+      }
+      .row-neutral {
+        background-color: lightyellow;
+      }
+      .favorite {
+        font-weight: bolder;
+      }
   </style>
 </head>
 
@@ -34,13 +46,17 @@ angular.module('app').controller('MyController', ['$scope', function($scope){
     });
 
 	function processData(data) {
-        Object.keys(data).forEach(function(name) {
-            var obj = {};
-            obj.name = name;
-            obj.date = new Date(data[name]);
+        data.forEach(function(obj) {
+            obj.date = new Date(obj.date);
             obj.dateString = obj.date.toLocaleDateString("de-DE");
-            obj.daysLeft = getDaysLeft(obj.date);
-            obj.yearsOld = getYearsOld(obj.date);
+            if(obj.dateString.endsWith(".1")) {
+                obj.dateString = obj.dateString.substring(0, obj.dateString.length - 2);
+                obj.daysLeft = getDaysLeft(obj.date);
+                obj.yearsOld = null;
+            } else{
+                obj.daysLeft = getDaysLeft(obj.date);
+                obj.yearsOld = getYearsOld(obj.date);
+            }
             $scope.data.push(obj);
         });
         $scope.$apply();
@@ -114,8 +130,8 @@ function getYearsOld(date) {
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="entry in data | orderBy: 'daysLeft' | filter:search">
-        <th scope="row">{{entry.name}}</th>
+        <tr class="row-{{entry.gender}} {{entry.favorite?'favorite':''}}" ng-repeat="entry in data | orderBy: 'daysLeft' | filter:search">
+        <td scope="row">{{entry.name}}</td>
         <td>{{entry.dateString}}</td>
         <td>{{entry.yearsOld}}</td>
         <td>{{entry.daysLeft}}</td>
