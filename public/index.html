@@ -57,15 +57,22 @@ angular.module('app').controller('MyController', ['$scope', function($scope){
 
 	function processData(data) {
         data.forEach(function(obj) {
-            obj.date = new Date(obj.date);
-            obj.dateString = obj.date.toLocaleDateString("de-DE");
-            if(obj.dateString.endsWith(".1")) {
-                obj.dateString = obj.dateString.substring(0, obj.dateString.length - 2);
-                obj.daysLeft = getDaysLeft(obj.date);
+            if(!obj.date) {
+                obj.date = null;
+                obj.dateString = null;
+                obj.daysLeft = null;
                 obj.yearsOld = null;
-            } else{
-                obj.daysLeft = getDaysLeft(obj.date);
-                obj.yearsOld = getYearsOld(obj.date);
+            } else {
+                obj.date = new Date(obj.date);
+                obj.dateString = obj.date.toLocaleDateString("de-DE");
+                if(obj.dateString.endsWith(".1")) {
+                    obj.dateString = obj.dateString.substring(0, obj.dateString.length - 2);
+                    obj.daysLeft = getDaysLeft(obj.date);
+                    obj.yearsOld = null;
+                } else{
+                    obj.daysLeft = getDaysLeft(obj.date);
+                    obj.yearsOld = getYearsOld(obj.date);
+                }
             }
             $scope.data.push(obj);
         });
