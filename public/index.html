@@ -62,15 +62,16 @@ angular.module('app').controller('MyController', ['$scope', function($scope){
                 obj.dateString = null;
                 obj.daysLeft = null;
                 obj.yearsOld = null;
+                obj.weekDay = null;
             } else {
                 obj.date = new Date(obj.date);
                 obj.dateString = obj.date.toLocaleDateString("de-DE");
+                obj.daysLeft = getDaysLeft(obj.date);
+                obj.weekDay = getWeekDay(obj.date);
                 if(obj.dateString.endsWith(".1")) {
                     obj.dateString = obj.dateString.substring(0, obj.dateString.length - 2);
-                    obj.daysLeft = getDaysLeft(obj.date);
                     obj.yearsOld = null;
                 } else{
-                    obj.daysLeft = getDaysLeft(obj.date);
                     obj.yearsOld = getYearsOld(obj.date);
                 }
             }
@@ -96,6 +97,18 @@ function getDaysLeft(date) {
     return daysLeft;
 }
 
+function getWeekDay(date) {
+    var one_day = 86400000.0;
+    var today = new Date();
+    var other = new Date(date);
+    other.setFullYear(today.getFullYear());
+    var diff = other.getTime() - today.getTime();
+    var daysLeft = Math.ceil(diff / one_day); 
+    if(daysLeft < 0) other.setFullYear(today.getFullYear() + 1);
+    //return other.getDay()
+    return other.toLocaleString('en-us', {  weekday: 'long' })
+}
+
 function getYearsOld(date) {
     var today = new Date();
     var other = new Date(date);
@@ -115,7 +128,7 @@ function getYearsOld(date) {
 <nav>
   <div class="nav nav-pills" id="nav-tab" role="tablist">
     <a class="nav-item nav-link active" id="nav-table-tab" data-toggle="tab" href="#nav-table" role="tab" aria-controls="nav-table" aria-selected="false">Table</a>
-    <a class="nav-item nav-link" id="nav-cards-tab" data-toggle="tab" href="#nav-cards" role="tab" aria-controls="nav-cards" aria-selected="true">Cards</a>
+    <!--a class="nav-item nav-link" id="nav-cards-tab" data-toggle="tab" href="#nav-cards" role="tab" aria-controls="nav-cards" aria-selected="true">Cards</a-->
     <input ng-model="search" type="text" class="nav-item form-control morespace" id="search" placeholder="Search">
   </div>
 </nav>
@@ -123,7 +136,7 @@ function getYearsOld(date) {
 <div class="tab-content" id="nav-tabContent">
 
 
-  <div class="tab-pane fade" id="nav-cards" role="tabpanel" aria-labelledby="nav-cards-tab">
+  <!--div class="tab-pane fade" id="nav-cards" role="tabpanel" aria-labelledby="nav-cards-tab">
     <div id="carddeck2" class="card-deck">
         <div ng-repeat="entry in data | orderBy: 'daysLeft' | filter:search" class='card bg-light' style='width: 18rem;'>
             <div class='card-header'><h5><b>{{entry.name}}</b></h5></div>
@@ -133,7 +146,7 @@ function getYearsOld(date) {
             <div class='card-footer'><h5>{{entry.dateString}}</h5></div>
         </div>
     </div>
-  </div>
+  </div-->
 
 
   <div class="tab-pane fade show active" id="nav-table" role="tabpanel" aria-labelledby="nav-table-tab">
@@ -144,6 +157,7 @@ function getYearsOld(date) {
         <th scope="col">Birthday</th>
         <th scope="col">Age</th>
         <th scope="col">Days left</th>
+        <th scope="col">Week Day</th>
         </tr>
     </thead>
     <tbody>
@@ -152,6 +166,7 @@ function getYearsOld(date) {
         <td>{{entry.dateString}}</td>
         <td>{{entry.yearsOld}}</td>
         <td>{{entry.daysLeft}}</td>
+        <td>{{entry.weekDay}}</td>
         </tr>
     </tbody>
     </table>
